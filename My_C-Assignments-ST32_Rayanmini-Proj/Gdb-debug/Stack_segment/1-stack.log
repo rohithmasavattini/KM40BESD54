@@ -1,0 +1,62 @@
+Reading symbols from ./1-stack...done.
+(gdb) r
+Starting program: /home/km/Gdb-debub/stack-segment/1-stack 
+[Inferior 1 (process 2261) exited normally]
+(gdb) l
+1	#include<stdio.h>
+2	void func1();
+3	int main()
+4	{
+5		int x=3;
+6	
+7		func1();
+8	}
+9	
+10	void func1()
+(gdb) l
+11	{
+12		int y=5;
+13	}
+(gdb) b func1
+Breakpoint 1 at 0x55555555461e: file 1-stack.c, line 12.
+(gdb) r
+Starting program: /home/km/Gdb-debub/stack-segment/1-stack 
+
+Breakpoint 1, func1 () at 1-stack.c:12
+12		int y=5;
+(gdb) p x
+No symbol "x" in current context.
+(gdb) p y
+$1 = 0
+(gdb) disass main
+Dump of assembler code for function main:
+   0x00005555555545fa <+0>:	push   %rbp
+   0x00005555555545fb <+1>:	mov    %rsp,%rbp
+   0x00005555555545fe <+4>:	sub    $0x10,%rsp
+   0x0000555555554602 <+8>:	movl   $0x3,-0x4(%rbp)
+   0x0000555555554609 <+15>:	mov    $0x0,%eax
+   0x000055555555460e <+20>:	callq  0x55555555461a <func1>
+   0x0000555555554613 <+25>:	mov    $0x0,%eax
+   0x0000555555554618 <+30>:	leaveq 
+   0x0000555555554619 <+31>:	retq   
+End of assembler dump.
+(gdb) disass func1
+Dump of assembler code for function func1:
+   0x000055555555461a <+0>:	push   %rbp
+   0x000055555555461b <+1>:	mov    %rsp,%rbp
+=> 0x000055555555461e <+4>:	movl   $0x5,-0x4(%rbp)
+   0x0000555555554625 <+11>:	nop
+   0x0000555555554626 <+12>:	pop    %rbp
+   0x0000555555554627 <+13>:	retq   
+End of assembler dump.
+(gdb) x/16gx $rbp-32
+0x7fffffffe060:	0x0000000000000001	0x000055555555467d
+0x7fffffffe070:	0x00007ffff7de3b40	0x0000000000000000
+0x7fffffffe080:	0x00007fffffffe0a0	0x0000555555554613
+0x7fffffffe090:	0x00007fffffffe180	0x0000000300000000
+0x7fffffffe0a0:	0x0000555555554630	0x00007ffff7a03bf7
+0x7fffffffe0b0:	0x0000000000000001	0x00007fffffffe188
+0x7fffffffe0c0:	0x0000000100008000	0x00005555555545fa
+0x7fffffffe0d0:	0x0000000000000000	0xec87a64a2fe46bdc
+
+

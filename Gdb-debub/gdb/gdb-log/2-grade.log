@@ -1,0 +1,56 @@
+(gdb) l
+1	#include <stdio.h>
+2	int main()
+3	{
+4	    float marks1, marks2, marks3, average;
+5	    printf("Enter marks obtained in subject 1 :");
+6	    scanf("%f", &marks1);
+7	    printf("Enter marks obtained in subject 2 :");
+8	    scanf("%f", &marks2);
+9	    printf("Enter marks obtained in subject 3 :");
+10	    scanf("%f", &marks3);
+(gdb) b 4
+Breakpoint 1 at 0x731: file 2-grade.c, line 4.
+(gdb) r
+Starting program: /home/km/embedded/gdb/grade 
+
+Breakpoint 1, main () at 2-grade.c:5
+5	    printf("Enter marks obtained in subject 1 :");
+(gdb) n
+6	    scanf("%f", &marks1);
+(gdb) n
+Enter marks obtained in subject 1 :55.6
+7	    printf("Enter marks obtained in subject 2 :");
+(gdb) n
+8	    scanf("%f", &marks2);
+(gdb) n
+Enter marks obtained in subject 2 :77.8
+9	    printf("Enter marks obtained in subject 3 :");
+(gdb) n
+10	    scanf("%f", &marks3);
+(gdb) p average
+$1 = 4.59163468e-41
+(gdb) n
+Enter marks obtained in subject 3 :88.6
+12	    average = (marks1 + marks2 + marks3) / 3;
+(gdb) p marks1
+$2 = 55.5999985
+(gdb) p marks2
+$3 = 77.8000031
+(gdb) p marks3
+$4 = 88.5999985
+(gdb) n
+13	    printf("Average : %0.2f\n", average);
+(gdb) n
+Average : 74.00
+15	    if (average >= 90)
+(gdb) n
+19	    else if (average >= 80)
+(gdb) n
+23	    else if (average >= 70)
+(gdb) n
+25	        printf("Grade C");
+(gdb) n
+35	    return 0;
+(gdb) n
+

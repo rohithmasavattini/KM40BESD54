@@ -1,0 +1,121 @@
+Reading symbols from ./a.out...done.
+(gdb) l
+1	#include <stdio.h>
+2	void swap(int a,int b);
+3	int main()
+4	{
+5	        int a,b;
+6	        printf("enter a and b:");
+7	        scanf("%d%d",&a,&b);
+8	        swap(a,b);
+9	        return 0;
+10	}
+(gdb) l
+11	
+12	void swap(int a,int b)
+13	{
+14	        int t;
+15	        t=a;
+16	        a=b;
+17	        b=t;
+18	        printf("after swaping:%d %d\n",a,b);
+19	}
+20	
+(gdb) b 4
+Breakpoint 1 at 0x722: file 2-cbvstack.c, line 4.
+(gdb) r
+Starting program: /home/km/Gdb-debub/stack-segment/a.out 
+
+Breakpoint 1, main () at 2-cbvstack.c:4
+4	{
+(gdb) n
+6	        printf("enter a and b:");
+(gdb) n
+7	        scanf("%d%d",&a,&b);
+(gdb) n
+enter a and b:10 20
+8	        swap(a,b);
+(gdb) p a
+$1 = 10
+(gdb) p b
+$2 = 20
+(gdb) disass 
+Dump of assembler code for function main:
+   0x000055555555471a <+0>:	push   %rbp
+   0x000055555555471b <+1>:	mov    %rsp,%rbp
+   0x000055555555471e <+4>:	sub    $0x10,%rsp
+   0x0000555555554722 <+8>:	mov    %fs:0x28,%rax
+   0x000055555555472b <+17>:	mov    %rax,-0x8(%rbp)
+   0x000055555555472f <+21>:	xor    %eax,%eax
+   0x0000555555554731 <+23>:	lea    0x11c(%rip),%rdi        # 0x555555554854
+   0x0000555555554738 <+30>:	mov    $0x0,%eax
+   0x000055555555473d <+35>:	callq  0x5555555545e0 <printf@plt>
+   0x0000555555554742 <+40>:	lea    -0xc(%rbp),%rdx
+   0x0000555555554746 <+44>:	lea    -0x10(%rbp),%rax
+   0x000055555555474a <+48>:	mov    %rax,%rsi
+   0x000055555555474d <+51>:	lea    0x10f(%rip),%rdi        # 0x555555554863
+   0x0000555555554754 <+58>:	mov    $0x0,%eax
+   0x0000555555554759 <+63>:	callq  0x5555555545f0 <__isoc99_scanf@plt>
+=> 0x000055555555475e <+68>:	mov    -0xc(%rbp),%edx
+   0x0000555555554761 <+71>:	mov    -0x10(%rbp),%eax
+   0x0000555555554764 <+74>:	mov    %edx,%esi
+---Type <return> to continue, or q <return> to quit---return
+   0x0000555555554766 <+76>:	mov    %eax,%edi
+   0x0000555555554768 <+78>:	callq  0x555555554788 <swap>
+   0x000055555555476d <+83>:	mov    $0x0,%eax
+   0x0000555555554772 <+88>:	mov    -0x8(%rbp),%rcx
+   0x0000555555554776 <+92>:	xor    %fs:0x28,%rcx
+   0x000055555555477f <+101>:	je     0x555555554786 <main+108>
+   0x0000555555554781 <+103>:	callq  0x5555555545d0 <__stack_chk_fail@plt>
+   0x0000555555554786 <+108>:	leaveq 
+   0x0000555555554787 <+109>:	retq   
+End of assembler dump.
+(gdb) s
+swap (a=10, b=20) at 2-cbvstack.c:15
+15	        t=a;
+(gdb) disass swap 
+Dump of assembler code for function swap:
+   0x0000555555554788 <+0>:	push   %rbp
+   0x0000555555554789 <+1>:	mov    %rsp,%rbp
+   0x000055555555478c <+4>:	sub    $0x20,%rsp
+   0x0000555555554790 <+8>:	mov    %edi,-0x14(%rbp)
+   0x0000555555554793 <+11>:	mov    %esi,-0x18(%rbp)
+=> 0x0000555555554796 <+14>:	mov    -0x14(%rbp),%eax
+   0x0000555555554799 <+17>:	mov    %eax,-0x4(%rbp)
+   0x000055555555479c <+20>:	mov    -0x18(%rbp),%eax
+   0x000055555555479f <+23>:	mov    %eax,-0x14(%rbp)
+   0x00005555555547a2 <+26>:	mov    -0x4(%rbp),%eax
+   0x00005555555547a5 <+29>:	mov    %eax,-0x18(%rbp)
+   0x00005555555547a8 <+32>:	mov    -0x18(%rbp),%edx
+   0x00005555555547ab <+35>:	mov    -0x14(%rbp),%eax
+   0x00005555555547ae <+38>:	mov    %eax,%esi
+   0x00005555555547b0 <+40>:	lea    0xb1(%rip),%rdi        # 0x555555554868
+   0x00005555555547b7 <+47>:	mov    $0x0,%eax
+   0x00005555555547bc <+52>:	callq  0x5555555545e0 <printf@plt>
+   0x00005555555547c1 <+57>:	nop
+---Type <return> to continue, or q <return> to quit---c
+   0x00005555555547c2 <+58>:	leaveq 
+   0x00005555555547c3 <+59>:	retq   
+End of assembler dump.
+(gdb) n
+16	        a=b;
+(gdb) n
+17	        b=t;
+(gdb) n
+18	        printf("after swaping:%d %d\n",a,b);
+(gdb) n
+after swaping:20 10
+19	}
+(gdb) x/16gx $rbp-32
+0x7fffffffe040:	0x0000000000000001	0x000000140000000a
+0x7fffffffe050:	0x00007ffff7de3b40	0x0000000a00000000
+0x7fffffffe060:	0x00007fffffffe080	0x000055555555476d
+0x7fffffffe070:	0x000000140000000a	0x027e3845687b2700
+0x7fffffffe080:	0x00005555555547d0	0x00007ffff7a03bf7
+0x7fffffffe090:	0x0000000000000001	0x00007fffffffe168
+0x7fffffffe0a0:	0x0000000100008000	0x000055555555471a
+0x7fffffffe0b0:	0x0000000000000000	0xc4af4741b02afbbc
+(gdb) n
+main () at 2-cbvstack.c:9
+9	        return 0;
+

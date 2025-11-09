@@ -1,0 +1,261 @@
+1	#include <stdio.h>
+2	int checkstock(int);
+3	void sales();
+4	void purchase();
+5	void addstock(int);
+6	//void deletestock();
+7	void deletestock(int);
+8	
+9	int main()
+10	{
+(gdb) l
+11		extern int stock;
+12		int n,i=1;
+13		char ch;
+14		while(i==1)
+15		{
+16		printf("please enter your choice:\n");
+17		printf("1.check Available stock:\n2.purchase new items:\n3.sell item:\n");
+18		scanf("%d",&n);
+19		switch(n)
+20		{
+(gdb) b 15
+Breakpoint 1 at 0x78d: file 6-supermak.c, line 15.
+(gdb) i b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x000000000000078d in main at 6-supermak.c:15
+(gdb) r
+Starting program: /home/km/embedded/gdb/supermarket 
+
+Breakpoint 1, main () at 6-supermak.c:16
+16		printf("please enter your choice:\n");
+(gdb) n
+please enter your choice:
+17		printf("1.check Available stock:\n2.purchase new items:\n3.sell item:\n");
+(gdb) n
+1.check Available stock:
+2.purchase new items:
+3.sell item:
+18		scanf("%d",&n);
+(gdb) n
+1
+19		switch(n)
+(gdb) b 39
+Breakpoint 2 at 0x555555554883: file 6-supermak.c, line 39.
+(gdb) i b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x000055555555478d in main at 6-supermak.c:15
+	breakpoint already hit 1 time
+2       breakpoint     keep y   0x0000555555554883 in checkstock at 6-supermak.c:39
+(gdb) n
+21			case 1: n=checkstock(stock);
+(gdb) s
+
+Breakpoint 2, checkstock (stock=100) at 6-supermak.c:43
+43		return stock;
+(gdb) n
+44	}
+(gdb) n
+main () at 6-supermak.c:22
+22				printf("available stock is:%d\n",n);
+(gdb) n
+available stock is:100
+23				break;
+(gdb) n
+31		printf("do you want to continue y/n:\n");
+(gdb) n
+do you want to continue y/n:
+32		scanf(" %c",&ch);
+(gdb) n
+y
+33		if(ch=='y')
+(gdb) n
+34			i=1;
+(gdb) n
+14		while(i==1)
+(gdb) n
+
+Breakpoint 1, main () at 6-supermak.c:16
+16		printf("please enter your choice:\n");
+(gdb) n
+please enter your choice:
+17		printf("1.check Available stock:\n2.purchase new items:\n3.sell item:\n");
+(gdb) n
+1.check Available stock:
+2.purchase new items:
+3.sell item:
+18		scanf("%d",&n);
+(gdb) n
+2
+19		switch(n)
+(gdb) n
+24			case 2:purchase();
+(gdb) s
+purchase () at 6-supermak.c:56
+56	{
+(gdb) n
+57		int item,limit=500;
+(gdb) n
+59		printf("enter number of item purchase :");
+(gdb) n
+60		scanf("%d",&item);
+(gdb) n
+enter number of item purchase :200
+61		if(item+stock<=limit)
+(gdb) n
+63			addstock(item);
+(gdb) n
+64			printf("purchase items: %d\n",item);
+(gdb) n
+purchase items: 200
+68	}
+(gdb) b 71
+Breakpoint 3 at 0x555555554960: file 6-supermak.c, line 71.
+(gdb) c
+Continuing.
+do you want to continue y/n:
+y
+
+Breakpoint 1, main () at 6-supermak.c:16
+16		printf("please enter your choice:\n");
+(gdb) n
+please enter your choice:
+17		printf("1.check Available stock:\n2.purchase new items:\n3.sell item:\n");
+(gdb) n
+1.check Available stock:
+2.purchase new items:
+3.sell item:
+18		scanf("%d",&n);
+(gdb) n
+3
+19		switch(n)
+(gdb) n
+26			case 3:sales();
+(gdb) n
+
+Breakpoint 3, sales () at 6-supermak.c:72
+72	{
+(gdb) n
+75		printf("enter number of items sold :");
+(gdb) n
+76		scanf("%d",&item);
+(gdb) n
+enter number of items sold :250
+77		if(item<=stock)
+(gdb) n
+79			deletestock(item);
+(gdb) n
+80			printf("%d are sold\n",item);
+(gdb) p item
+$1 = 250
+(gdb) p stock
+$2 = 50
+(gdb) n
+250 are sold
+84	}
+(gdb) n
+main () at 6-supermak.c:27
+27				break;
+(gdb) n
+31		printf("do you want to continue y/n:\n");
+(gdb) n
+do you want to continue y/n:
+32		scanf(" %c",&ch);
+(gdb) n
+y
+33		if(ch=='y')
+(gdb) n
+34			i=1;
+(gdb) n
+14		while(i==1)
+(gdb) n
+
+Breakpoint 1, main () at 6-supermak.c:16
+16		printf("please enter your choice:\n");
+(gdb) n
+please enter your choice:
+17		printf("1.check Available stock:\n2.purchase new items:\n3.sell item:\n");
+(gdb) n
+1.check Available stock:
+2.purchase new items:
+3.sell item:
+18		scanf("%d",&n);
+(gdb) n
+1
+19		switch(n)
+(gdb) n
+21			case 1: n=checkstock(stock);
+(gdb) s
+
+Breakpoint 2, checkstock (stock=50) at 6-supermak.c:43
+43		return stock;
+(gdb) n
+44	}
+(gdb) n
+main () at 6-supermak.c:22
+22				printf("available stock is:%d\n",n);
+(gdb) n
+available stock is:50
+23				break;
+(gdb) n
+31		printf("do you want to continue y/n:\n");
+(gdb) b 71
+Note: breakpoint 3 also set at pc 0x555555554960.
+Breakpoint 4 at 0x555555554960: file 6-supermak.c, line 71.
+(gdb) c
+Continuing.
+do you want to continue y/n:
+y
+
+Breakpoint 1, main () at 6-supermak.c:16
+16		printf("please enter your choice:\n");
+(gdb) c
+Continuing.
+please enter your choice:
+1.check Available stock:
+2.purchase new items:
+3.sell item:
+3
+
+Breakpoint 3, sales () at 6-supermak.c:72
+72	{
+(gdb) n
+75		printf("enter number of items sold :");
+(gdb) n
+76		scanf("%d",&item);
+(gdb) n
+enter number of items sold :10
+77		if(item<=stock)
+(gdb) n
+79			deletestock(item);
+(gdb) s
+deletestock (item=10) at 6-supermak.c:47
+47		stock -= item;
+(gdb) n
+48	}
+(gdb) p stock 
+$3 = 40
+(gdb) n
+sales () at 6-supermak.c:80
+80			printf("%d are sold\n",item);
+(gdb) n
+10 are sold
+84	}
+(gdb) n
+main () at 6-supermak.c:27
+27				break;
+(gdb) n
+31		printf("do you want to continue y/n:\n");
+(gdb) n
+do you want to continue y/n:
+32		scanf(" %c",&ch);
+(gdb) n
+n
+33		if(ch=='y')
+(gdb) n
+36			i=0;
+(gdb) n
+14		while(i==1)
+(gdb) n
+38	}
+

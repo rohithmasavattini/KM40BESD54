@@ -1,0 +1,230 @@
+From 99b508b1083ea9f40e360d59625507537410fd83 Mon Sep 17 00:00:00 2001
+From: Kishore Kumar Boddu <kishore@kernelmasters.org>
+Date: Mon, 3 Jan 2022 18:45:10 +0530
+Subject: [PATCH] Create meta-km-bbb layer and also create recipes-bsp,
+ recipes-kernel inside the layer
+
+---
+ .../recipes-kernel/linux/linux-stable_4.19.bb |  5 +-
+ meta-km-bbb/COPYING.MIT                       | 17 +++++
+ meta-km-bbb/README                            | 41 +++++++++++
+ meta-km-bbb/conf/layer.conf                   | 13 ++++
+ .../recipes-example/example/example_0.1.bb    | 11 +++
+ .../linux/linux-stable_%.bbappend             |  3 +
+ ...O11-Raising-Edge-Interrupt-porting-o.patch | 71 +++++++++++++++++++
+ 7 files changed, 158 insertions(+), 3 deletions(-)
+ create mode 100644 meta-km-bbb/COPYING.MIT
+ create mode 100644 meta-km-bbb/README
+ create mode 100644 meta-km-bbb/conf/layer.conf
+ create mode 100644 meta-km-bbb/recipes-example/example/example_0.1.bb
+ create mode 100644 meta-km-bbb/recipes-km-bbb-kernel/linux/linux-stable_%.bbappend
+ create mode 100644 meta-km-bbb/recipes-km-bbb-kernel/linux/patches/0005-Enter-Switch-GPIO11-Raising-Edge-Interrupt-porting-o.patch
+
+diff --git a/meta-bbb/recipes-kernel/linux/linux-stable_4.19.bb b/meta-bbb/recipes-kernel/linux/linux-stable_4.19.bb
+index 6b5469a..81f4c7b 100644
+--- a/meta-bbb/recipes-kernel/linux/linux-stable_4.19.bb
++++ b/meta-bbb/recipes-kernel/linux/linux-stable_4.19.bb
+@@ -15,6 +15,5 @@ SRCREV = "58ac7b864e15789f208b285202bbc31c91edd259"
+ SRC_URI = " \
+     git://github.com/kernelmasters/beagleboneblack-kernel.git \
+     file://defconfig \
+-    file://0002-Mux-Config-in-DTS-LCD_DATA_13.GPIO0_9-LCD_DATA14.GPI.patch \
+-    file://0005-Enter-Switch-GPIO11-Raising-Edge-Interrupt-porting-o.patch \
+-"
++    file://0002-Mux-Config-in-DTS-LCD_DATA_13.GPIO0_9-LCD_DATA14.GPI.patch"
++#file://0005-Enter-Switch-GPIO11-Raising-Edge-Interrupt-porting-o.patch
+diff --git a/meta-km-bbb/COPYING.MIT b/meta-km-bbb/COPYING.MIT
+new file mode 100644
+index 0000000..fb950dc
+--- /dev/null
++++ b/meta-km-bbb/COPYING.MIT
+@@ -0,0 +1,17 @@
++Permission is hereby granted, free of charge, to any person obtaining a copy 
++of this software and associated documentation files (the "Software"), to deal 
++in the Software without restriction, including without limitation the rights 
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
++copies of the Software, and to permit persons to whom the Software is 
++furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in 
++all copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
++THE SOFTWARE.
+diff --git a/meta-km-bbb/README b/meta-km-bbb/README
+new file mode 100644
+index 0000000..89b6232
+--- /dev/null
++++ b/meta-km-bbb/README
+@@ -0,0 +1,41 @@
++This README file contains information on the contents of the meta-km-bbb layer.
++
++Please see the corresponding sections below for details.
++
++Dependencies
++============
++
++  URI: <first dependency>
++  branch: <branch name>
++
++  URI: <second dependency>
++  branch: <branch name>
++
++  .
++  .
++  .
++
++Patches
++=======
++
++Please submit any patches against the meta-km-bbb layer to the xxxx mailing list (xxxx@zzzz.org)
++and cc: the maintainer:
++
++Maintainer: XXX YYYYYY <xxx.yyyyyy@zzzzz.com>
++
++Table of Contents
++=================
++
++  I. Adding the meta-km-bbb layer to your build
++ II. Misc
++
++
++I. Adding the meta-km-bbb layer to your build
++=================================================
++
++Run 'bitbake-layers add-layer meta-km-bbb'
++
++II. Misc
++========
++
++--- replace with specific information about the meta-km-bbb layer ---
+diff --git a/meta-km-bbb/conf/layer.conf b/meta-km-bbb/conf/layer.conf
+new file mode 100644
+index 0000000..495eccf
+--- /dev/null
++++ b/meta-km-bbb/conf/layer.conf
+@@ -0,0 +1,13 @@
++# We have a conf and classes directory, add to BBPATH
++BBPATH .= ":${LAYERDIR}"
++
++# We have recipes-* directories, add to BBFILES
++BBFILES += "${LAYERDIR}/recipes-*/*/*.bb \
++            ${LAYERDIR}/recipes-*/*/*.bbappend"
++
++BBFILE_COLLECTIONS += "meta-km-bbb"
++BBFILE_PATTERN_meta-km-bbb = "^${LAYERDIR}/"
++BBFILE_PRIORITY_meta-km-bbb = "6"
++
++LAYERDEPENDS_meta-km-bbb = "core"
++LAYERSERIES_COMPAT_meta-km-bbb = "warrior zeus"
+diff --git a/meta-km-bbb/recipes-example/example/example_0.1.bb b/meta-km-bbb/recipes-example/example/example_0.1.bb
+new file mode 100644
+index 0000000..c4b873d
+--- /dev/null
++++ b/meta-km-bbb/recipes-example/example/example_0.1.bb
+@@ -0,0 +1,11 @@
++SUMMARY = "bitbake-layers recipe"
++DESCRIPTION = "Recipe created by bitbake-layers"
++LICENSE = "MIT"
++
++python do_build() {
++    bb.plain("***********************************************");
++    bb.plain("*                                             *");
++    bb.plain("*  Example recipe created by bitbake-layers   *");
++    bb.plain("*                                             *");
++    bb.plain("***********************************************");
++}
+diff --git a/meta-km-bbb/recipes-km-bbb-kernel/linux/linux-stable_%.bbappend b/meta-km-bbb/recipes-km-bbb-kernel/linux/linux-stable_%.bbappend
+new file mode 100644
+index 0000000..b55aff4
+--- /dev/null
++++ b/meta-km-bbb/recipes-km-bbb-kernel/linux/linux-stable_%.bbappend
+@@ -0,0 +1,3 @@
++FILESEXTRAPATHS_prepend := "${THISDIR}/patches:"
++SRC_URI += "file://0005-Enter-Switch-GPIO11-Raising-Edge-Interrupt-porting-o.patch"
++
+diff --git a/meta-km-bbb/recipes-km-bbb-kernel/linux/patches/0005-Enter-Switch-GPIO11-Raising-Edge-Interrupt-porting-o.patch b/meta-km-bbb/recipes-km-bbb-kernel/linux/patches/0005-Enter-Switch-GPIO11-Raising-Edge-Interrupt-porting-o.patch
+new file mode 100644
+index 0000000..8def586
+--- /dev/null
++++ b/meta-km-bbb/recipes-km-bbb-kernel/linux/patches/0005-Enter-Switch-GPIO11-Raising-Edge-Interrupt-porting-o.patch
+@@ -0,0 +1,71 @@
++From 7c14ec94be2e73fc5f04090139f3fb1fe7753c74 Mon Sep 17 00:00:00 2001
++From: BodduKishoreKumar <kishore@kernelmasters.org>
++Date: Fri, 14 May 2021 11:58:13 +0530
++Subject: [PATCH 5/5] Enter Switch (GPIO11: Raising Edge Interrupt) porting on
++ KM-BBB target board
++
++---
++ arch/arm/boot/dts/km-bbb-am335x.dts | 10 ++++++++++
++ drivers/input/keyboard/gpio_keys.c  | 11 +++++++++++
++ 2 files changed, 21 insertions(+)
++
++diff --git a/arch/arm/boot/dts/km-bbb-am335x.dts b/arch/arm/boot/dts/km-bbb-am335x.dts
++index ff5dfd4f3..4c75d54e2 100644
++--- a/arch/arm/boot/dts/km-bbb-am335x.dts
+++++ b/arch/arm/boot/dts/km-bbb-am335x.dts
++@@ -31,6 +31,16 @@
++                 regulator-max-microvolt = <3300000>;
++         };
++ 
+++        gpio-keys {
+++                       compatible = "gpio-keys";
+++                         autorepeat;
+++                         enter {
+++                                 label = "GPIO Key ENTER";
+++                                 linux,code = <28>;
+++                                 gpios = <&gpio0 11 0>;
+++                         };
+++         };
+++
++ };
++ 
++ &am33xx_pinmux {
++diff --git a/drivers/input/keyboard/gpio_keys.c b/drivers/input/keyboard/gpio_keys.c
++index 492a971b9..4776f62fe 100644
++--- a/drivers/input/keyboard/gpio_keys.c
+++++ b/drivers/input/keyboard/gpio_keys.c
++@@ -32,6 +32,8 @@
++ #include <linux/spinlock.h>
++ #include <dt-bindings/input/gpio-keys.h>
++ 
+++#define KM_DEBUG
+++
++ struct gpio_button_data {
++ 	const struct gpio_keys_button *button;
++ 	struct input_dev *input;
++@@ -778,6 +780,11 @@ static int gpio_keys_probe(struct platform_device *pdev)
++ 	int i, error;
++ 	int wakeup = 0;
++ 
+++
+++	#ifdef KM_DEBUG
+++	printk("%s:%s:%d\n",__FILE__,__func__,__LINE__);
+++	#endif
+++
++ 	if (!pdata) {
++ 		pdata = gpio_keys_get_devtree_pdata(dev);
++ 		if (IS_ERR(pdata))
++@@ -872,6 +879,10 @@ static int gpio_keys_probe(struct platform_device *pdev)
++ 
++ 	device_init_wakeup(dev, wakeup);
++ 
+++	#ifdef KM_DEBUG
+++	printk("%s:%s:%d\n",__FILE__,__func__,__LINE__);
+++	#endif
+++
++ 	return 0;
++ }
++ 
++-- 
++2.17.1
++
+-- 
+2.17.1
+

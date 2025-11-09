@@ -1,0 +1,121 @@
+Reading symbols from ./a.out...done.
+(gdb) l
+1	#include<stdio.h>
+2	void swap(int *,int *);
+3	int main()
+4	{
+5	        int a,b;
+6	        printf("enter a and b:");
+7	        scanf("%d%d",&a,&b);
+8	        swap(&a,&b);
+9	        printf("After swaping:%d %d\n",a,b);
+10	        return 0;
+(gdb) l
+11	}
+12	
+13	void swap(int *p1,int *p2)
+14	{
+15	        int t;
+16	        t=*p1;
+17	        *p1=*p2;
+18	        *p2=t;
+19	}
+20	
+(gdb) b main
+Breakpoint 1 at 0x722: file 2-cbrstack.c, line 4.
+(gdb) r
+Starting program: /home/km/Gdb-debub/stack-segment/a.out 
+
+Breakpoint 1, main () at 2-cbrstack.c:4
+4	{
+(gdb) n
+6	        printf("enter a and b:");
+(gdb) n
+7	        scanf("%d%d",&a,&b);
+(gdb) n
+enter a and b:10 20
+8	        swap(&a,&b);
+(gdb) disass main
+Dump of assembler code for function main:
+   0x000055555555471a <+0>:	push   %rbp
+   0x000055555555471b <+1>:	mov    %rsp,%rbp
+   0x000055555555471e <+4>:	sub    $0x10,%rsp
+   0x0000555555554722 <+8>:	mov    %fs:0x28,%rax
+   0x000055555555472b <+17>:	mov    %rax,-0x8(%rbp)
+   0x000055555555472f <+21>:	xor    %eax,%eax
+   0x0000555555554731 <+23>:	lea    0x12c(%rip),%rdi        # 0x555555554864
+   0x0000555555554738 <+30>:	mov    $0x0,%eax
+   0x000055555555473d <+35>:	callq  0x5555555545e0 <printf@plt>
+   0x0000555555554742 <+40>:	lea    -0xc(%rbp),%rdx
+   0x0000555555554746 <+44>:	lea    -0x10(%rbp),%rax
+   0x000055555555474a <+48>:	mov    %rax,%rsi
+   0x000055555555474d <+51>:	lea    0x11f(%rip),%rdi        # 0x555555554873
+   0x0000555555554754 <+58>:	mov    $0x0,%eax
+   0x0000555555554759 <+63>:	callq  0x5555555545f0 <__isoc99_scanf@plt>
+=> 0x000055555555475e <+68>:	lea    -0xc(%rbp),%rdx
+   0x0000555555554762 <+72>:	lea    -0x10(%rbp),%rax
+   0x0000555555554766 <+76>:	mov    %rdx,%rsi
+---Type <return> to continue, or q <return> to quit---c
+   0x0000555555554769 <+79>:	mov    %rax,%rdi
+   0x000055555555476c <+82>:	callq  0x5555555547a5 <swap>
+   0x0000555555554771 <+87>:	mov    -0xc(%rbp),%edx
+   0x0000555555554774 <+90>:	mov    -0x10(%rbp),%eax
+   0x0000555555554777 <+93>:	mov    %eax,%esi
+   0x0000555555554779 <+95>:	lea    0xf8(%rip),%rdi        # 0x555555554878
+   0x0000555555554780 <+102>:	mov    $0x0,%eax
+   0x0000555555554785 <+107>:	callq  0x5555555545e0 <printf@plt>
+   0x000055555555478a <+112>:	mov    $0x0,%eax
+   0x000055555555478f <+117>:	mov    -0x8(%rbp),%rcx
+   0x0000555555554793 <+121>:	xor    %fs:0x28,%rcx
+   0x000055555555479c <+130>:	je     0x5555555547a3 <main+137>
+   0x000055555555479e <+132>:	callq  0x5555555545d0 <__stack_chk_fail@plt>
+   0x00005555555547a3 <+137>:	leaveq 
+   0x00005555555547a4 <+138>:	retq   
+End of assembler dump.
+(gdb) s
+swap (p1=0x7fffffffe070, p2=0x7fffffffe074) at 2-cbrstack.c:16
+16	        t=*p1;
+(gdb) disass swap
+Dump of assembler code for function swap:
+   0x00005555555547a5 <+0>:	push   %rbp
+   0x00005555555547a6 <+1>:	mov    %rsp,%rbp
+   0x00005555555547a9 <+4>:	mov    %rdi,-0x18(%rbp)
+   0x00005555555547ad <+8>:	mov    %rsi,-0x20(%rbp)
+=> 0x00005555555547b1 <+12>:	mov    -0x18(%rbp),%rax
+   0x00005555555547b5 <+16>:	mov    (%rax),%eax
+   0x00005555555547b7 <+18>:	mov    %eax,-0x4(%rbp)
+   0x00005555555547ba <+21>:	mov    -0x20(%rbp),%rax
+   0x00005555555547be <+25>:	mov    (%rax),%edx
+   0x00005555555547c0 <+27>:	mov    -0x18(%rbp),%rax
+   0x00005555555547c4 <+31>:	mov    %edx,(%rax)
+   0x00005555555547c6 <+33>:	mov    -0x20(%rbp),%rax
+   0x00005555555547ca <+37>:	mov    -0x4(%rbp),%edx
+   0x00005555555547cd <+40>:	mov    %edx,(%rax)
+   0x00005555555547cf <+42>:	nop
+   0x00005555555547d0 <+43>:	pop    %rbp
+   0x00005555555547d1 <+44>:	retq   
+End of assembler dump.
+(gdb) n
+17	        *p1=*p2;
+(gdb) n
+18	        *p2=t;
+(gdb) n
+19	}
+(gdb) n
+main () at 2-cbrstack.c:9
+9	        printf("After swaping:%d %d\n",a,b);
+(gdb) n
+After swaping:20 10
+10	        return 0;
+(gdb) x/16gx $rbp-32
+0x7fffffffe060:	0x00007fffffffe080	0x000055555555478a
+0x7fffffffe070:	0x0000000a00000014	0xdcd80eb3e3c34d00
+0x7fffffffe080:	0x00005555555547e0	0x00007ffff7a03bf7
+0x7fffffffe090:	0x0000000000000001	0x00007fffffffe168
+0x7fffffffe0a0:	0x0000000100008000	0x000055555555471a
+0x7fffffffe0b0:	0x0000000000000000	0x39a7a53577a46082
+0x7fffffffe0c0:	0x0000555555554610	0x00007fffffffe160
+0x7fffffffe0d0:	0x0000000000000000	0x0000000000000000
+(gdb) n
+11	}
+

@@ -1,0 +1,1 @@
+cmd_/home/km/KM_GIT/new_ldd/ldd/My_Interrupts/slpy_irq.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/km/KM_GIT/new_ldd/ldd/My_Interrupts/slpy_irq.ko /home/km/KM_GIT/new_ldd/ldd/My_Interrupts/slpy_irq.o /home/km/KM_GIT/new_ldd/ldd/My_Interrupts/slpy_irq.mod.o ;  true

@@ -1,0 +1,122 @@
+(gdb) l
+1	#include<stdio.h>
+2	int strstr_2(char s1[],char s2[]);
+3	int cmp1(char s1[],char s2[],int i);
+4	int main()
+5	{
+6		char s1[100],s2[100];
+7		printf("enter a main string and substring:");
+8		scanf("%[^\n] %99s",s1,s2);
+9		int i=strstr_2(s1,s2);
+10		if(i==-1)
+(gdb) l
+11			printf("\"%s\" was not found in the main string\n",s2);
+12		else
+13			printf("\"%s\" was found at index %d\n:",s2,i);
+14	}
+15	
+16	int strstr_2(char s1[],char s2[])
+17	{
+18		int i;
+19		for(i=0;s1[i]!='\0';i++)
+20		{
+(gdb) b main
+Breakpoint 1 at 0x725: file 7-strstr.c, line 5.
+(gdb) r
+Starting program: /home/km/embedded/gdb/strstr 
+
+Breakpoint 1, main () at 7-strstr.c:5
+5	{
+(gdb) n
+7		printf("enter a main string and substring:");
+(gdb) n
+8		scanf("%[^\n] %99s",s1,s2);
+(gdb) n
+enter a main string and substring:kernel master   
+mast
+9		int i=strstr_2(s1,s2);
+(gdb) s
+strstr_2 (s1=0x7fffffffdfe0 "kernel master", s2=0x7fffffffe050 "mast")
+    at 7-strstr.c:19
+19		for(i=0;s1[i]!='\0';i++)
+(gdb) n
+21			if(s1[i]==s2[0])
+(gdb) n
+19		for(i=0;s1[i]!='\0';i++)
+(gdb) n
+21			if(s1[i]==s2[0])
+(gdb) n
+19		for(i=0;s1[i]!='\0';i++)
+(gdb) n
+21			if(s1[i]==s2[0])
+(gdb) n
+19		for(i=0;s1[i]!='\0';i++)
+(gdb) n
+21			if(s1[i]==s2[0])
+(gdb) n
+19		for(i=0;s1[i]!='\0';i++)
+(gdb) n
+21			if(s1[i]==s2[0])
+(gdb) n
+19		for(i=0;s1[i]!='\0';i++)
+(gdb) n
+21			if(s1[i]==s2[0])
+(gdb) n
+19		for(i=0;s1[i]!='\0';i++)
+(gdb) n
+21			if(s1[i]==s2[0])
+(gdb) n
+19		for(i=0;s1[i]!='\0';i++)
+(gdb) n
+21			if(s1[i]==s2[0])
+(gdb) n
+22				if (cmp1(s1,s2,i)==1)
+(gdb) s
+cmp1 (s1=0x7fffffffdfe0 "kernel master", s2=0x7fffffffe050 "mast", i=7)
+    at 7-strstr.c:30
+30		i++;
+(gdb) n
+32		for(k=1;s2[k]!='\0';k++,i++)
+(gdb) n
+34			if(s1[i]!=s2[k])
+(gdb) n
+32		for(k=1;s2[k]!='\0';k++,i++)
+(gdb) n
+34			if(s1[i]!=s2[k])
+(gdb) p s1[i] 
+$11 = 115 's'
+(gdb) p s2[k]
+$12 = 115 's'
+(gdb) n
+32		for(k=1;s2[k]!='\0';k++,i++)
+(gdb) n
+34			if(s1[i]!=s2[k])
+(gdb) p s1 [i]
+$13 = 116 't'
+(gdb) p s2 [k]
+$14 = 116 't'
+(gdb) n
+32		for(k=1;s2[k]!='\0';k++,i++)
+(gdb) n
+37		return 1;
+(gdb) n
+39	}
+(gdb) n
+strstr_2 (s1=0x7fffffffdfe0 "kernel master", s2=0x7fffffffe050 "mast")
+    at 7-strstr.c:23
+23					return i;
+(gdb) n
+26	}
+(gdb) n
+main () at 7-strstr.c:10
+10		if(i==-1)
+(gdb) n
+13			printf("\"%s\" was found at index %d\n:",s2,i);
+(gdb) n
+"mast" was found at index 7
+14	}
+(gdb) i b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000555555554725 in main at 7-strstr.c:5
+	breakpoint already hit 1 time
+

@@ -1,0 +1,52 @@
+Linux Test Project - Device Driver Test (LTP-DDT) Development Enviornment:
+-------------------------------------------------------------------------
+
+Step1: Install Toolchain
+
+Linux-3.14 kernel install gcc 4
+Linux-4.4 kernel install gcc 7.
+
+Upgrade kernel 3.14 to 4.4:
+--------------------------
+sudo apt-get install linux-generic-lts-xenial
+
+Step2: CROSS-COMPILE AND INSTALL Kernel
+cd to kernel diretory and then do headers_install in kernel install directory
+
+	$ cd ~/KM_GIT/bbb/kernel-bbb-3.14
+	$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabihf- distclean
+	$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabihf- headers_install
+
+Step3: Download ltp-ddt from km server
+	$ cd ~/KM_GIT/bbb/ltp-ddt/
+	$ git clone git@192.168.1.6:bbb/ltp-ddt.git
+
+Step4: Initiate LTP - DDT Build
+$ cd ~/KM_GIT/bbb/ltp-ddt
+$ make autotools
+$ export CROSS_COMPILER=arm-linux-gnueabihf-
+$ export CC=${CROSS_COMPILER}gcc
+$ export LD=${CROSS_COMPILER}ld
+$ export AR=${CROSS_COMPILER}ar
+$ export STRIP=${CROSS_COMPILER}strip
+$ export RANLIB=${CROSS_COMPILER}ranlib
+$./configure --host=x86-64 
+
+$ make SKIP_IDCHECK=1  KERNEL_INC=~/toolchain/gcc-linaro-7.1.1-2017.08-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/include/  KERNEL_USR_INC=~/toolchain/gcc-linaro-7.1.1-2017.08-x86_64_arm-linux-gnueabihf/arm-linux-gnueabihf/libc/usr/include/  CROSS_COMPILE=arm-linux-gnueabihf- PLATFORM=am335x-evm
+
+
+Step6: Install
+$sudo make DESTDIR=/opt/ltp-ddt-install SKIP_IDCHECK=1 PLATFORM=beaglebone install
+Copy the entire /opt folder on SD-CARD and boot beagle bone black with SD-CARD inserted
+
+Step7:
+Run DDT tests on beagle bone black with example as shown:
+
+	$ ./runltp -P am335x-evm -f ddt/gpio-tests
+
+	rohith
+	./configure --host=arm-linux-gnueabihf
+	./configure --host=x86_64-linux-gnu
+
+
+

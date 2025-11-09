@@ -1,0 +1,94 @@
+(gdb) l
+1	#include <stdio.h>
+2	int biggest(int num);
+3	int main()
+4	{
+5	    int num,b,limit;
+6	    printf("eneter the limit:");
+7	    scanf("%d",&limit);
+8	    b=biggest(limit);
+9	    printf("Biggest number is:%d\n",b);
+10	    return 0;
+(gdb) l
+11	}    
+12	int biggest(int limit)
+13	{
+14	    int i,big,num;
+15	    printf("enetr %d numbers:",limit);
+16	    for(i=1;i<=limit;i++)
+17	    {
+18	    scanf("%d",&num);
+19	    if(num>big || i == 1)
+20	    {
+(gdb) b main
+Breakpoint 1 at 0x722: file 3-big.c, line 4.
+(gdb) i b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000000000000722 in main at 3-big.c:4
+(gdb) r
+Starting program: /home/km/embedded/gdb/big 
+
+Breakpoint 1, main () at 3-big.c:4
+4	{
+(gdb) n
+6	    printf("eneter the limit:");
+(gdb) n
+7	    scanf("%d",&limit);
+(gdb) n
+eneter the limit:3
+8	    b=biggest(limit);
+(gdb) s
+biggest (limit=3) at 3-big.c:13
+13	{
+(gdb) n
+15	    printf("enetr %d numbers:",limit);
+(gdb) n
+16	    for(i=1;i<=limit;i++)
+(gdb) n
+18	    scanf("%d",&num);
+(gdb) n
+enetr 3 numbers:2
+19	    if(num>big || i == 1)
+(gdb) n
+21	        big=num;
+(gdb) p big
+$1 = 32767
+(gdb) n
+16	    for(i=1;i<=limit;i++)
+(gdb) p big
+$2 = 2
+(gdb) n
+18	    scanf("%d",&num);
+(gdb) n
+8   
+19	    if(num>big || i == 1)
+(gdb) n
+21	        big=num;
+(gdb) p big
+$3 = 2
+(gdb) n
+16	    for(i=1;i<=limit;i++)
+(gdb) p big
+$4 = 8
+(gdb) n
+18	    scanf("%d",&num);
+(gdb) n
+5
+19	    if(num>big || i == 1)
+(gdb) p big
+$5 = 8
+(gdb) n
+16	    for(i=1;i<=limit;i++)
+(gdb) p big
+$6 = 8
+(gdb) n
+24	    return big;
+(gdb) n
+25	}
+(gdb) n
+main () at 3-big.c:9
+9	    printf("Biggest number is:%d\n",b);
+(gdb) n
+Biggest number is:8
+10	    return 0;
+

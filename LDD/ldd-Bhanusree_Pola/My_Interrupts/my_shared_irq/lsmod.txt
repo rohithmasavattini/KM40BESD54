@@ -1,0 +1,10 @@
+Module                  Size  Used by
+Mouse_SharedIRQ        16384  0
+memory                 16384  0
+CharDriver             16384  0
+nls_utf8               16384  1
+isofs                  45056  1
+vboxsf                 77824  1
+vboxvideo              36864  0
+crct10dif_pclmul       16384  0
+crc32_pclmul           16384  0

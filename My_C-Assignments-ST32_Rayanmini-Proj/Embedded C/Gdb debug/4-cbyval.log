@@ -1,0 +1,55 @@
+(gdb) l
+1	#include <stdio.h>
+2	void swap(int a,int b);
+3	int main()
+4	{
+5	        int a,b;
+6	        printf("enter a and b:");
+7	        scanf("%d%d",&a,&b);
+8	        swap(a,b);
+9	        return 0;
+10	}
+(gdb) b 4
+Breakpoint 1 at 0x722: file 4-callby_value.c, line 4.
+(gdb) i b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000000000000722 in main 
+                                                   at 4-callby_value.c:4
+(gdb) r
+Starting program: /home/km/embedded/gdb/callre 
+
+Breakpoint 1, main () at 4-callby_value.c:4
+4	{
+(gdb) n
+6	        printf("enter a and b:");
+(gdb) n
+7	        scanf("%d%d",&a,&b);
+(gdb) n
+enter a and b:10 20
+8	        swap(a,b);
+(gdb) p a
+$1 = 10
+(gdb) p b
+$2 = 20
+(gdb) s
+swap (a=10, b=20) at 4-callby_value.c:15
+15	        t=a;
+(gdb) n
+16	        a=b;
+(gdb) n
+17	        b=t;
+(gdb) n
+18	        printf("after swaping:%d %d\n",a,b);
+(gdb) p a
+$3 = 20
+(gdb) p b
+$4 = 10
+(gdb) n
+after swaping:20 10
+19	}
+(gdb) n
+main () at 4-callby_value.c:9
+9	        return 0;
+(gdb) n
+10	}
+

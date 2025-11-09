@@ -1,0 +1,29 @@
+short int  2bytes    %hi 
+
+unsigned short int  2  %hu 
+ 
+int  4   %d
+
+unsigned int  4   %u
+
+float 4  %f
+ 
+double  8  %lf
+
+long double 16 %LF
+
+char    1  %c 
+
+unsigned char 1 %c
+
+long int  8   %l
+
+unsigned long int  8  %lu
+
+string   %s
+
+hexadecimal reprasentation   %x/%X
+
+octal   %o
+
+print nothing %n

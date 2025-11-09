@@ -1,0 +1,120 @@
+(gdb) l
+1	#include <stdio.h>
+2	int Change_Value = 0;
+3	int Sum_it (int, int);
+4	void error_with_code (void);
+5	
+6	
+7	int main (void)
+8	{
+9	    int Arg_1 = 20, Arg_2 = 40;
+10	    int i;
+(gdb) l
+11	     for (i = 0; i < 10; i++)
+12	     {
+13	        if (Arg_1 > Arg_2)
+14	             Arg_2 = Sum_it (Arg_1, Arg_2);
+15	        else
+16	            Arg_1 = Sum_it (Arg_1, Arg_2);
+17	     }
+18	     error_with_code ();
+19	}  
+20	
+(gdb) b 11
+Breakpoint 1 at 0x610: file 1-gdb-sample.c, line 11.
+(gdb) i b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000000000000610 in main at 1-gdb-sample.c:11
+(gdb) l
+21	
+22	int Sum_it (int a, int b)
+23	{
+24	     return a+b;
+25	
+26	} 
+27	
+28	void error_with_code(void)
+29	{
+30	    int divide_value;
+(gdb) l
+31	    int result;
+32	
+33	    divide_value = Change_Value;
+34	    result = 10 / divide_value;
+35	    return ;
+36	
+37	}
+38	
+39	
+(gdb) b 33
+Breakpoint 2 at 0x675: file 1-gdb-sample.c, line 33.
+(gdb) i b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000000000000610 in main at 1-gdb-sample.c:11
+2       breakpoint     keep y   0x0000000000000675 in error_with_code 
+                                                   at 1-gdb-sample.c:33
+(gdb) r
+Starting program: /home/km/embedded/gdb/sample 
+
+Breakpoint 1, main () at 1-gdb-sample.c:11
+11	     for (i = 0; i < 10; i++)
+(gdb) n
+13	        if (Arg_1 > Arg_2)
+(gdb) p Arg_1
+$1 = 20
+(gdb) p Arg_2
+$2 = 40
+(gdb) p Change_Value
+$3 = 0
+(gdb) s
+16	            Arg_1 = Sum_it (Arg_1, Arg_2);
+(gdb) s
+Sum_it (a=20, b=40) at 1-gdb-sample.c:24
+24	     return a+b;
+(gdb) n
+26	} 
+(gdb) n
+main () at 1-gdb-sample.c:11
+11	     for (i = 0; i < 10; i++)
+(gdb) n
+13	        if (Arg_1 > Arg_2)
+(gdb) s
+14	             Arg_2 = Sum_it (Arg_1, Arg_2);
+(gdb) s
+Sum_it (a=60, b=40) at 1-gdb-sample.c:24
+24	     return a+b;
+(gdb) n
+26	} 
+(gdb) n
+main () at 1-gdb-sample.c:11
+11	     for (i = 0; i < 10; i++)
+(gdb) n
+13	        if (Arg_1 > Arg_2)
+(gdb) p Arg_1
+$4 = 60
+(gdb) p Arg_1
+$5 = 60
+(gdb) p Arg_2
+$6 = 100
+(gdb) c
+Continuing.
+
+Breakpoint 2, error_with_code () at 1-gdb-sample.c:33
+33	    divide_value = Change_Value;
+(gdb) p divide_value
+$7 = 1780
+(gdb) p Change_Value
+$8 = 0
+(gdb) n
+34	    result = 10 / divide_value;
+(gdb) p divide_value
+$9 = 0
+(gdb) p result
+$10 = 2880
+(gdb) n
+
+Program received signal SIGFPE, Arithmetic exception.
+0x0000555555554684 in error_with_code () at 1-gdb-sample.c:34
+34	    result = 10 / divide_value;
+(gdb)  
+
